@@ -1,3 +1,5 @@
+# virtual environment
 ecommerce-env
 
+# sqlite database
 db.sqlite3

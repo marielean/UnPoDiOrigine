@@ -1,3 +1,3 @@
-# from .file1 import *
+from .Index import *
 # from .file2 import *
 # etc
