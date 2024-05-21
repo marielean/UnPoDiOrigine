@@ -33,6 +33,6 @@ class Login(View):
         print(email, password)
         return render(request, 'login.html', {'error': error_message})
     
-def Logout(request):
+def logout(request):
     request.session.clear()
     return redirect('login')
