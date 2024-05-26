@@ -1,7 +1,8 @@
-from django.shortcuts import render, redirect, HttpResponseRedirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, HttpResponse
 from store.models.product import Product
 from store.models.category import Category
 from django.views import View
+from django.template import loader
 
 class Index(View):
     def post(self, request):
@@ -29,8 +30,10 @@ class Index(View):
         return redirect('homepage')
     
     def get(self, request):
-        return HttpResponseRedirect(f'/store{request.get_full_path()[1:]}')
-    
+        # return HttpResponseRedirect(f'/store{request.get_full_path()[1:]}')
+        product_list = Product.get_all_products()
+        context = {"product_list": product_list}
+        return render(request, 'store/index.html', context)
 
 def store(request):
     cart = request.session.get('cart')

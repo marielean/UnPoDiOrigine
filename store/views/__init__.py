@@ -1,3 +1,5 @@
-from .Index import *
-# from .file2 import *
-# etc
+from .home import Index, store
+from .signup import Signup
+from .login import Login, logout
+from .checkout import CheckOut
+from .orders import OrderView

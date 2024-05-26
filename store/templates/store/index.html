@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to our website!</h1>
+    <p>This is the home page.</p>
+    {% if product_list %}
+        <ul>
+        {% for product in product_list%}
+            <li>
+                {{product.name}}
+                {{product.description}}
+                {{product.price}}
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>No products are available.</p>
+    {% endif %}
+</body>
+</html>
