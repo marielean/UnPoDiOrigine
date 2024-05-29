@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, HttpResponseRedirect
-from django.contrib.auth.hashers import check_password
-from store.models.customer import Customer
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
+from store.models.form.login_form import LoginForm
 from django.views import View
 
 class Login(View):
@@ -8,31 +10,22 @@ class Login(View):
 
     def get(self, request):
         Login.return_url = request.GET.get('return_url')
-        return render(request, 'login.html')
+        return render(request, 'store/login.html', {'form': LoginForm()})
     
     def post(self, request):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        customer = Customer.get_customer_by_email(email)
-        error_message = None
-        if customer:
-            flag = check_password(password, customer.password)
-            if flag:
-                request.session['customer'] = customer.id
-
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            user = authenticate(request, email=form.cleaned_data['email'], password=form.cleaned_data['password'])
+            if user is not None:
+                auth_login(request, user)
                 if Login.return_url:
                     return HttpResponseRedirect(Login.return_url)
                 else:
                     Login.return_url = None
                     return redirect('homepage')
-            else:
-                error_message = 'Email or Password invalid'
         else:
-            error_message = 'Email or Password invalid'
+            return render(request, 'store/login.html', {'form': form}, status=401)
         
-        print(email, password)
-        return render(request, 'login.html', {'error': error_message})
-    
 def logout(request):
-    request.session.clear()
-    return redirect('login')
+    auth_logout(request)
+    return redirect('homepage')

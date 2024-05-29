@@ -1,0 +1,26 @@
+{% load bootstrap5 %}
+
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    {% bootstrap_css %}
+    {% bootstrap_javascript %}
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- Altri tag head qui -->
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navbar -->
+    {% block navbar %}
+    {% endblock %}
+    <div class="px-5">
+        <!-- Contenuto -->
+        {% block content %}{% endblock %}
+    </div>
+</body>
+
+</html>
