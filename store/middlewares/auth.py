@@ -1,10 +1,12 @@
 from django.shortcuts import redirect
+from django.contrib.auth import get_user
+
 
 def auth_middleware(get_response):
 
     def middleware(request):
-        
-        if not request.session.get('customer'):
+        user = get_user(request)
+        if not user.is_authenticated:
             return redirect('login')
         
         response = get_response(request)
