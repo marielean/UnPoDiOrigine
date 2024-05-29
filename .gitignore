@@ -1,9 +1,15 @@
 
 # virtual environment
 ecommerce-env
+
 # sqlite database
 db.sqlite3
+
+# Migration files
+**/migrations/
+
 # ignore pycache files
 __pycache__
 **/__pycache__/
 */__pycache__
+*.pyc
