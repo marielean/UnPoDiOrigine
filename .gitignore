@@ -1,5 +1,7 @@
 # virtual environment
 ecommerce-env
+.env
+.venv
 
 # sqlite database
 db.sqlite3
@@ -18,3 +20,7 @@ __pycache__
 # VS Code
 .vscode/
 .DS_Store
+
+# coverage
+htmlcov/
+.coverage

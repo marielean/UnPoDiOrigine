@@ -38,16 +38,22 @@ class Index(View):
         return self.__store(request)
     
     def __store(self, request):
+        # cart = request.session.get('cart')
+        # if not cart:
+        #     request.session['cart'] = {}
+        # products = None
+        # categories = Category.get_all_categories()
+        # categoryID = request.GET.get('category')
+        # if categoryID:
+        #     products = Product.get_all_products_by_categoryid(categoryID)
+        # else:
+        #     products = Product.get_all_products()
         cart = request.session.get('cart')
         if not cart:
             request.session['cart'] = {}
-        products = None
+        products = Product.get_all_products()
         categories = Category.get_all_categories()
-        categoryID = request.GET.get('category')
-        if categoryID:
-            products = Product.get_all_products_by_categoryid(categoryID)
-        else:
-            products = Product.get_all_products()
+
 
         data = {}
         data['products'] = products

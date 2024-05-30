@@ -4,3 +4,4 @@ from .login import Login, logout
 from .checkout import CheckOut
 from .profile import Profile
 from .orders import OrderView
+from .cart import Cart 

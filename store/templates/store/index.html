@@ -1,19 +1,23 @@
 {% extends "store/store_base.html" %}
-
 {% block head %}
 <title>Home</title>
 {% endblock %}
-
 {% block content %}
 <h1>Welcome to our website!</h1>
 <p>This is the home page.</p>
-{% if product_list %}
+{% if products %}
 <ul>
-    {% for product in product_list%}
+    {% for product in products %}
     <li>
         {{product.name}}
         {{product.description}}
         {{product.price}}
+        <form method="post" action="cart">
+            {% csrf_token %}
+            <input type="hidden" name="product_id" value="{{ product.id }}">
+            <input type="hidden" name="action" value="add">
+            <button type="submit">Add to cart</button>
+        </form>
     </li>
     {% endfor %}
 </ul>

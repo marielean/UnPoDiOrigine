@@ -1,0 +1,27 @@
+{% extends "store/store_base.html" %}
+
+{% block head %}
+<title>Login</title>
+{% endblock %}
+
+{% block content %}
+{% for item in cart %}
+<div>
+    <h2>{{ item.product.name }}</h2>
+    <p>{{ item.quantity }}</p>
+    <form method="post" action='cart'>
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+        <input type="hidden" name="action" value="delete">
+        <button type="submit">Rimuovi</button>
+    </form>
+    <form method="post" action='cart'>
+        {% csrf_token %}
+        <input type="hidden" name="product_id" value="{{ item.product.id }}">
+        <input type="hidden" name="action" value="update">
+        <input type="number" name="quantity" value="{{ item.quantity }}">
+        <button type="submit">Aggiorna</button>
+    </form>
+</div>
+{% endfor %}
+{% endblock %}
