@@ -1,5 +1,6 @@
 {% extends "store/store_base.html" %}
 
+
 {% block head %}
 <title>Home</title>
 {% endblock %}
@@ -19,11 +20,15 @@
                     <span class="badge bg-info text-dark">{{ product.category }}</span>
                 </div>
                 <!-- Product Image -->
-                <img src="{{ product.image_url }}" class="card-img-top" alt="Image of {{ product.name }}">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                {% else %}
+                no image
+                {% endif %}
                 <div class="card-body">
                     <h5 class="card-title">{{ product.name }}</h5>
                     <p class="card-text">{{ product.description }}</p>
-                    <p class="card-text"><strong>Price:</strong> {{ product.price }}</p>
+                    <p class="card-text"><strong>Price:</strong> {{ product.price }} €</p>
                 </div>
                 <div class="card-footer bg-white">
                     <form method="post" action="cart">
