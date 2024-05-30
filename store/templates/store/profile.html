@@ -1,26 +1,29 @@
 {% extends "store/store_base.html" %}
+
 {% block head %}
-<title>Profilo</title>
+<title>Profile</title>
 {% endblock %}
 
 {% block content %}
-<h1>Profilo di {{ user.first_name }} {{user.last_name}}</h1>
-
-<form method="post" class="form-horizontal">
-    {% csrf_token %}
-    {% for field in form %}
-    <div class="form-group mb-3">
-        {{ field.errors }}
-        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-        <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}"
-            class="form-control" value="{{ field.value|default_if_none:'' }}">
-    </div>
-    {% endfor %}
-    <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-primary">Aggiorna</button>
+<div class="container py-5">
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h1 class="card-title text-center mb-4">Profile of {{ user.first_name }} {{ user.last_name }}</h1>
+            <form method="post" class="form-horizontal">
+                {% csrf_token %}
+                {% for field in form %}
+                <div class="mb-3">
+                    {{ field.errors }}
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                    <input type="{{ field.field.widget.input_type }}" name="{{ field.html_name }}" id="{{ field.id_for_label }}"
+                        class="form-control" value="{{ field.value|default_if_none:'' }}" placeholder="{{ field.label }}">
+                </div>
+                {% endfor %}
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-block">Update</button>
+                </div>
+            </form>
         </div>
     </div>
-</form>
-
+</div>
 {% endblock %}

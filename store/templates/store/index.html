@@ -1,27 +1,44 @@
 {% extends "store/store_base.html" %}
+
 {% block head %}
 <title>Home</title>
 {% endblock %}
+
 {% block content %}
-<h1>Welcome to our website!</h1>
-<p>This is the home page.</p>
-{% if products %}
-<ul>
-    {% for product in products %}
-    <li>
-        {{product.name}}
-        {{product.description}}
-        {{product.price}}
-        <form method="post" action="cart">
-            {% csrf_token %}
-            <input type="hidden" name="product_id" value="{{ product.id }}">
-            <input type="hidden" name="action" value="add">
-            <button type="submit">Add to cart</button>
-        </form>
-    </li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>No products are available.</p>
-{% endif %}
+<div class="container py-5">
+    <h1 class="text-center mb-4">Welcome to our website!</h1>
+    <h2 class="text-center mb-4">Products</h2>
+
+    {% if products %}
+    <div class="row row-cols-1 row-cols-md-3 g-4"> <!-- Adjust 'row-cols-md-3' to 'row-cols-md-4' for 4 cards per row if needed -->
+        {% for product in products %}
+        <div class="col">
+            <div class="card h-100 shadow-sm">
+                <!-- Badge for category -->
+                <div class="card-header bg-transparent border-0">
+                    <span class="badge bg-info text-dark">{{ product.category }}</span>
+                </div>
+                <!-- Product Image -->
+                <img src="{{ product.image_url }}" class="card-img-top" alt="Image of {{ product.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ product.name }}</h5>
+                    <p class="card-text">{{ product.description }}</p>
+                    <p class="card-text"><strong>Price:</strong> {{ product.price }}</p>
+                </div>
+                <div class="card-footer bg-white">
+                    <form method="post" action="cart">
+                        {% csrf_token %}
+                        <input type="hidden" name="product_id" value="{{ product.id }}">
+                        <input type="hidden" name="action" value="add">
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-center">No products are available.</p>
+    {% endif %}
+</div>
 {% endblock %}
