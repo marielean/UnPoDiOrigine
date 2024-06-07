@@ -5,6 +5,7 @@ ecommerce-env
 
 # sqlite database
 db.sqlite3
+db-backup.sqlite3
 
 # Migration files
 **/migrations/
@@ -14,8 +15,8 @@ __pycache__
 **/__pycache__/
 */__pycache__
 *.pyc
-*/cpython-38.pyc
-*/cpython-310.pyc
+*.cpython-38.pyc
+*.cpython-310.pyc
 
 # VS Code
 .vscode/
@@ -24,3 +25,6 @@ __pycache__
 # coverage
 htmlcov/
 .coverage
+
+# uploads
+uploads/*
