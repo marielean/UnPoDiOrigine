@@ -1,0 +1,8 @@
+services:
+  unpodiorigine:
+    image: unpodiorigine:latest
+    ports:
+      - 8000:8000
+    volumes:
+      - ./data:/usr/src/app/data
+      - ./uploads:/usr/src/app/uploads

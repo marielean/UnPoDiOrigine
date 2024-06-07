@@ -4,11 +4,10 @@ from store.models.customer import Customer
 from django.views import View
 from store.models.product import Product
 from store.models.order import Order
-from store.middlewares.auth import auth_middleware
 
 class OrderView(View):
     def get(self, request):
-        customer = request.session.get('customer')
+        customer = request.user
         orders = Order.get_orders_by_customer(customer)
-        print(orders)
-        return render(request, 'orders.html', {'orders': orders})
+
+        return render(request, 'store/orders.html', {'orders': orders}, status=200)
