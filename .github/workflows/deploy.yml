@@ -22,7 +22,10 @@ jobs:
         run: |
           python -m venv .venv
           .venv/bin/python -m pip install --upgrade pip
-          .venv/bin/pip install -r requirements.txt      
+          .venv/bin/pip install -r requirements.txt
+      - name: Create migrations
+        run: |
+          .venv/bin/python manage.py makemigrations
       - name: Run tests
         run: |
           .venv/bin/python manage.py test -v2
