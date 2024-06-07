@@ -1,11 +1,12 @@
 from django.test import TestCase
-from store.models.customer import Customer
+from store.models.customer import Customer, CustomerManager
 from django.test import Client
 from django.urls import reverse
 from django.test import TestCase
 
 class TestCustomer(TestCase):
     def setUp(self):
+        self.manager = Customer.objects
         Customer.objects.create(first_name="John", last_name="Doe", phone="1234567890", email="john.doe@domain.com", password="password")
 
     def test_get_full_name(self):
@@ -38,18 +39,33 @@ class TestCustomer(TestCase):
         self.assertEqual(customer.last_name, "Doe")
         self.assertEqual(customer.phone, "1234567890")
         self.assertEqual(customer.email, "john.doe@domain.com")
-        self.assertEqual(customer.password, "password")
 
-    def test_isExists(self):
-        ''' Test if the customer exists '''
-        customer = Customer.objects.get(email="john.doe@domain.com")
-        self.assertTrue(customer.isExists())
-
-        another_customer = Customer(first_name="Jane", last_name="Doe", phone="0987654321", email="jane.doe@domain.com", password="password")
-        self.assertFalse(another_customer.isExists())
-
-    # It is not necessary to delete the objects created in the setUp method since the test database is destroyed after the tests are run.
-    # def tearDown(self):
-    #     Customer.objects.all().delete()
-        
+    def test_create_user(self):
+        ''' Test if the user is created '''
+        customer = self.manager.create_user(email="test@email.com", first_name="Test", last_name="User", phone="1234567890", password="password")
+        self.assertEqual(customer.first_name, "Test")
+        self.assertEqual(customer.last_name, "User")
+        self.assertEqual(customer.phone, "1234567890")
+        self.assertEqual(customer.email, "test@email.com")
     
+    def test_normalize_email(self):
+        ''' Test if the email is normalized '''
+        user = self.manager.create_user(email="Test@Example.COM", password="testpassword", first_name="Test", last_name="User", phone="1234567890")
+        self.assertEqual(user.email, "Test@example.com")
+
+    def test_create_user_without_email(self):
+        with self.assertRaises(ValueError):
+            self.manager.create_user(email=None, password="testpassword", first_name="Test", last_name="User", phone="1234567890")
+
+    def test_create_superuser_without_is_staff(self):
+        with self.assertRaises(ValueError):
+            self.manager.create_superuser(email="admin@example.com", password="adminpassword", is_staff=False, first_name="Test", last_name="User", phone="1234567890")
+
+    def test_create_superuser_without_is_superuser(self):
+        with self.assertRaises(ValueError):
+            self.manager.create_superuser(email="admin@example.com", password="adminpassword", is_superuser=False, first_name="Test", last_name="User", phone="1234567890")
+
+    def test_password_set_correctly(self):
+        user = self.manager.create_user(email="test@example.com", password="testpassword")
+        self.assertNotEqual(user.password, "testpassword")
+        self.assertTrue(user.check_password("testpassword"))

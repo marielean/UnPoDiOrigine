@@ -1,27 +1,46 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.hashers import check_password
 from store.models.customer import Customer
 from django.views import View
 from store.models.product import Product
 from store.models.order import Order
+from store.models.order_product import OrderProduct
+from store.models.cart_item import CartItem
+import datetime
+from django.db import transaction
+from store.models.form.checkout_form import CheckoutForm
 
 class CheckOut(View):
+    def get(self, request):
+        form = CheckoutForm()
+        customer = request.user
+        cart = CartItem.get_cart_by_customer(customer)
+        total = CartItem.get_cart_total_by_customer(customer)
+        return render(request, 'store/checkout.html', {'form': form, 'cart': cart, 'total': total})
+
+    @transaction.atomic
     def post(self, request):
-        address = request.POST.get('address')
-        phone = request.POST.get('phone')
-        customer = request.session.get('customer')
-        cart = request.session.get('cart')
-        products = Product.get_products_by_id(list(cart.keys()))
-        print(address, phone, customer, cart, products)
+        form = CheckoutForm(request.POST)
+        customer = request.user
+        cart = CartItem.get_cart_by_customer(customer)
 
-        for product in products:
-            order = Order(customer=Customer(id=customer),
-                          product=product,
-                          price=product.price,
-                          address=address,
-                          phone=phone,
-                          quantity=cart.get(str(product.id)))
-            order.save()
-        request.session['cart'] = {}
+        if not form.is_valid():
+            return render(request, 'store/checkout.html', {'form': form, 'cart': cart})
+        
+        order = Order(customer=customer,
+                          address=form.data.get('address'),
+                          phone=form.data.get('phone'),
+                          date=datetime.datetime.today()
+                          )
+        order.save()
 
-        return redirect('cart')
+        for cart_item in cart:
+            # create order product
+            order_product = OrderProduct(order=order,
+                                         product=cart_item.product,
+                                         quantity=cart_item.quantity
+                                         )
+            order_product.save()
+            # delete cart item
+            cart_item.delete()
+            
+        return redirect('orders')

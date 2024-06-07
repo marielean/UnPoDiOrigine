@@ -3,11 +3,11 @@ from django.views import View
 from store.models.product import Product
 from store.models.cart_item import CartItem
 
-
 class Cart(View):
     def get(self, request):
         cart = CartItem.get_cart_by_customer(request.user)
-        return render(request, 'store/cart.html', {'cart': cart})
+        total = CartItem.get_cart_total_by_customer(request.user)
+        return render(request, 'store/cart.html', {'cart': cart, 'total': total})
 
     def post(self, request):
         product_id = request.POST.get('product_id')

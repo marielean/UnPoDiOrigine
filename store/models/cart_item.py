@@ -1,7 +1,6 @@
 from django.db import models
 from .product import Product
 from .customer import Customer
-import datetime
 
 class CartItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -17,3 +16,12 @@ class CartItem(models.Model):
     
     def get_total_price(self):
         return self.product.price * self.quantity
+    
+    @staticmethod
+    def get_cart_total_by_customer(customer_id):
+        cart_items = CartItem.objects.filter(customer = customer_id)
+        total = 0
+        for cart_item in cart_items:
+            total += cart_item.get_total_price()
+        return total
+    

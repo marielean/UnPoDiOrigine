@@ -8,46 +8,55 @@
 <div class="container py-5">
     <h1 class="text-center mb-4">Your Shopping Cart</h1>
     {% if cart %}
-        {% for item in cart %}
-        <div class="card mb-3">
-            <div class="card-body">
-                <div class="row align-items-center">
-                    <div class="col-md-6">
-                        <h5 class="card-title">
-                            <span class="badge bg-info text-dark">{{ item.product.category }}</span></br>
-                            {{ item.product.name }}
-                        </h5>
-                    </div>
-                    <div class="col-md-2">
-                        <p class="card-text"><strong>Quantity:</strong> {{ item.quantity }}</p>
-                    </div>
-                    <div class="col-md-4">
-                        <form method="post" action='cart' class="d-flex align-items-center me-2">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ item.product.id }}">
-                            <input type="hidden" name="action" value="update">
-                        
-                            <div class="input-group input-group-sm">
-                                <input type="number" name="quantity" value="{{ item.quantity }}" class="form-control">
-                                <button type="submit" class="btn btn-info btn-sm ms-2">
-                                    <i class="bi bi-arrow-repeat"></i> Update
-                                </button>
-                            </div>
-                        </form>
-                        
-                        <form method="post" action='cart' class="d-inline">
-                            {% csrf_token %}
-                            <input type="hidden" name="product_id" value="{{ item.product.id }}">
-                            <input type="hidden" name="action" value="delete">
-                            <button type="submit" class="btn btn-danger btn-sm mt-2 ms-2">
-                                <i class="bi bi-trash"></i> Remove
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    {% for item in cart %}
+    <div class="row align-items-center">
+        <div class="col-md-4">
+            <h5>
+                <span class="badge bg-info text-dark">{{ item.product.category }}</span></br>
+                {{ item.product.name }}
+            </h5>
         </div>
-        {% endfor %}
+        <div class="col-md-2">
+            <p class="card-text"><strong>Quantity:</strong> {{ item.quantity }}</p>
+        </div>
+        <div class="col-md-2">
+            <p class="card-text"><strong>Unit Price:</strong> {{ item.product.price }}</p>
+        </div>
+        <div class="col-md-2">
+            <p class="card-text"><strong>Total Price:</strong> {{ item.get_total_price }}</p>
+        </div>
+        <div class="col-md-2">
+            <form method="post" action='cart' class="d-flex align-items-center me-2">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <input type="hidden" name="action" value="update">
+
+                <div class="input-group input-group-sm">
+                    <input type="number" name="quantity" value="{{ item.quantity }}" class="form-control">
+                    <button type="submit" class="btn btn-info btn-sm ms-2">
+                        <i class="bi bi-arrow-repeat"></i> Update
+                    </button>
+                </div>
+            </form>
+
+            <form method="post" action='cart' class="d-inline">
+                {% csrf_token %}
+                <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                <input type="hidden" name="action" value="delete">
+                <button type="submit" class="btn btn-danger btn-sm mt-2 ms-2">
+                    <i class="bi bi-trash"></i> Remove
+                </button>
+            </form>
+        </div>
+    </div>
+    {% endfor %}
+    <div class="row">
+        <div class="col-md-12 pt-5">
+            <h5><strong>Total Cart Price:</strong> {{ total }}</h5>
+            <!-- Add the button here -->
+            <a href="{% url 'checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+        </div>
+    </div>
     {% else %}
     <p class="text-center">Your cart is empty.</p>
     {% endif %}

@@ -26,5 +26,6 @@ class UserProfileForm(forms.ModelForm):
 
         if commit:
             user.save()
-
-        return user
+            return user
+        
+        return None

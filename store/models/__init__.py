@@ -5,3 +5,4 @@ from .product import Product
 from .order import Order
 from .cart_item import CartItem
 from .form import *
+from .order_product import OrderProduct
